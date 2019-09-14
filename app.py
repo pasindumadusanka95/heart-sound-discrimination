@@ -4,11 +4,9 @@
 # In[ ]:
 
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import base64
-import IPython.display as ipd
 import librosa
-import librosa.display
 import numpy as np
 import tensorflow as tf
 from firebase import Firebase
@@ -58,7 +56,7 @@ db = firebase.database()
 # In[ ]:
 
 
-@app.route('/home')
+@app.route('/home', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 def home():
     #user_id = "Joe1234"
     user_id = request.args.get('user_id')
@@ -67,12 +65,18 @@ def home():
     audio_path = get_audio_from_the_db(user_id)
     print("Audio file captured.")
     result = predict_class_of_the_audio_file(audio_path)
-    amp_vals = amplitude_loader(audio_path)
+    amp_vals = [str(i) for i in amplitude_loader(audio_path)]
     print(result)
+    for i in amp_vals:
+        print(i)
     print(amp_vals)
-    all_result = [user_id, result[0], str(amp_vals)]
+    all_result = {"user_id": user_id , "result":result[0][0], "freq":str(amp_vals)}
     #return all_result
-    return return jsonify(all_result)
+    return jsonify({
+    "user_id": user_id,
+    "result": str(result[0][0]),
+    "freq": ""
+})
 
 
 # In[ ]:
