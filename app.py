@@ -4,7 +4,7 @@
 # In[ ]:
 
 
-from flask import Flask, request, render_template
+from flask import Flask, request
 import base64
 import IPython.display as ipd
 import librosa
@@ -72,7 +72,7 @@ def home():
     print(amp_vals)
     all_result = [user_id, result[0], str(amp_vals)]
     #return all_result
-    return render_template('home.html', result=all_result)
+    return return jsonify(all_result)
 
 
 # In[ ]:
