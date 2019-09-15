@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 from flask import Flask, request, jsonify
@@ -56,8 +56,16 @@ db = firebase.database()
 # In[ ]:
 
 
-@app.route('/home', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-def home():
+@app.route('/', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def index():
+    return "Welcome to hsv project"
+
+
+# In[ ]:
+
+
+@app.route('/predict', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predict():
     #user_id = "Joe1234"
     user_id = request.args.get('user_id')
     print("Heart sound disriminator started.")
@@ -91,14 +99,6 @@ def amplitude_loader(audio_path):
 
 
 def get_audio_from_the_db(user_id):
-    #my_stream = db.child("users").stream(stream_handler)
-    #Initialize db
-    
-    #Set data
-    #data = {"name": "Joe Tilsed", "audio": "121313", "prediction": ""}
-    #db.child("users").child("Joe1234").set(data)
-    
-    #Get data
     users = db.child("users").get()
     #print(users.val()[user_id])
     
@@ -131,7 +131,7 @@ def get_audio_from_the_db(user_id):
     
     mp3_data = base64.b64decode(b64_str)
     #print(mp3_data)
-    save_audio = "./heart_sound_discrimination_model_classifire/data/audio/test/{}_audio.mp3".format(user_id)
+    save_audio = "./sample_audio/{}_audio.mp3".format(user_id)
     fnew = open(save_audio, "wb")
     fnew.write(mp3_data)
     fnew.close()
@@ -177,7 +177,7 @@ def predict_class_of_the_audio_file(audio_path):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000) #run app in debug mode on port 5000
+    app.run()
 
 
 # In[ ]:
