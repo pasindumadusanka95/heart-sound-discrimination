@@ -6,8 +6,8 @@
 
 from flask import Flask, request, jsonify
 import base64
-import librosa
 import numpy as np
+import librosa
 import tensorflow as tf
 from firebase import Firebase
 from keras.models import load_model
@@ -73,26 +73,14 @@ def predict():
     audio_path = get_audio_from_the_db(user_id)
     print("Audio file captured.")
     result = predict_class_of_the_audio_file(audio_path)
-    amp_vals = [str(i) for i in amplitude_loader(audio_path)]
+    #amp_vals = [str(i) for i in amplitude_loader(audio_path)]
     print(result)
-    for i in amp_vals:
-        print(i)
-    print(amp_vals)
-    all_result = {"user_id": user_id , "result":result[0][0], "freq":str(amp_vals)}
     #return all_result
     return jsonify({
     "user_id": user_id,
-    "result": str(result[0][0]),
+    "result": str(result[0]),
     "freq": ""
 })
-
-
-# In[ ]:
-
-
-def amplitude_loader(audio_path):
-    y, sr = librosa.load(audio_path, duration=2.97)
-    return y
 
 
 # In[ ]:
@@ -164,7 +152,7 @@ def predict_class_of_the_audio_file(audio_path):
     #classes = {4:'heart_sound', 2:'children_playing', 3:'dog_bark', 0:'air_conditioner', 1: 'car_horn'}
     class_of_audio = predict.argmax(axis=-1)
     
-    return [class_of_audio, predict]
+    return class_of_audio
 
 
 # In[ ]:
